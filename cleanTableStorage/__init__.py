@@ -1,29 +1,16 @@
 import os
 import json
-from datetime import datetime
+import time
 import logging
-import pandas as pd
-import azure.functions as func
 from azure.cosmosdb.table.tableservice import TableService
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ManagedIdentityCredential
-
-
-def get_data_from_table_storage_table(table_service, table_name):
-    """ Retrieve data from Table Storage """
-    SOURCE_TABLE = table_name
-    for record in table_service.query_entities(
-        SOURCE_TABLE
-    ):
-        yield record
-        
-def get_dataframe_from_table_storage_table(table_service, table_name):
-    """ Create a dataframe from table storage data """
-    return pd.DataFrame(get_data_from_table_storage_table(table_service, table_name))
+import azure.functions as func
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
+
     KeyVault_DNS = os.environ["KeyVault_DNS"]
     SecretName = os.environ["SecretName"]
 
@@ -31,25 +18,24 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         name= req.headers.get('name')
     else:
         name = req.params.get('name')
-    
+
     if name:
         creds = ManagedIdentityCredential()
         client = SecretClient(vault_url=KeyVault_DNS, credential=creds)
         retrieved_secret = client.get_secret(SecretName)
 
         table_service = TableService(connection_string=retrieved_secret.value)
+        
+        table_service.delete_table(name)
+        time.sleep(1)
+        existe = False
+        while(not existe):
+            logging.info("Intentando crearla...")
+            time.sleep(5)
+            existe = table_service.create_table(name)
 
-        df = get_dataframe_from_table_storage_table(table_service, name)
-        maximo = df['time'].max()
-        dateMax = datetime.fromtimestamp(maximo.timestamp())
-        dateRet = dateMax
+        logging.info("Listo!!")
 
-        ret = dict()
-        ret['max'] = dateRet.strftime("%Y%m%d %H:%M:%S")
-        return func.HttpResponse(
-             json.dumps(ret),
-             status_code=200
-        )
     else:
         return func.HttpResponse(
              "Please pass a name on the query string or in the request body",
