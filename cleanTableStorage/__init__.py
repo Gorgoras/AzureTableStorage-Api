@@ -36,6 +36,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         logging.info("Listo!!")
 
+        ret = dict()
+        ret['resultado'] = 'Listo!'
+        return func.HttpResponse(
+             json.dumps(ret),
+             status_code=200
+        )
     else:
         return func.HttpResponse(
              "Please pass a name on the query string or in the request body",
