@@ -20,8 +20,7 @@ Deletes everything from a table, similar to truncate but you also lose columns (
 
 ```json
 {
-    "name": "testAzureTableStorage",
-    "column": "RowKey"
+    "name": "testAzureTableStorage"
 }
 ```
 
