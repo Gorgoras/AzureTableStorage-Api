@@ -29,9 +29,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     if(req.method == 'POST'):
         name= req.headers.get('name')
+        col = req.headers.get('column')
     else:
         name = req.params.get('name')
-    
+        name = req.params.get('column')
     if name:
         creds = ManagedIdentityCredential()
         client = SecretClient(vault_url=KeyVault_DNS, credential=creds)
@@ -40,7 +41,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         table_service = TableService(connection_string=retrieved_secret.value)
 
         df = get_dataframe_from_table_storage_table(table_service, name)
-        maximo = df['time'].max()
+        maximo = df[col].max()
         dateMax = datetime.fromtimestamp(maximo.timestamp())
         dateRet = dateMax
 
