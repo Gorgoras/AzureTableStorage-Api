@@ -15,7 +15,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     
     table_name= req.headers.get('name')
     
-    value = req.form.to_dict()
+    value = req.get_json()
+
     
     if table_name:
         try: # Try with managed identity, otherwise to with Service Principal
@@ -42,17 +43,23 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             except:
                 table_service.insert_entity(table_name=table_name, entity=value)
         else:
+            ret = dict()
+            ret['result'] = "Please create the table!"
             return func.HttpResponse(
-             "Please create the table!!",
+             json.dumps(ret),
              status_code=400
         )
+        ret = dict()
+        ret['result'] = "Success"
         return func.HttpResponse(
-             "Success",
+             json.dumps(ret),
              status_code=200
         )
 
     else:
+        ret = dict()
+        ret['result'] = "Please pass a name!!"
         return func.HttpResponse(
-             "Please pass a name on the query string or in the request body",
+             json.dumps(ret),
              status_code=400
         )

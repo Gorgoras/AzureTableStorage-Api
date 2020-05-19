@@ -61,7 +61,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
              status_code=200
         )
     else:
+        ret = dict()
+        ret['result'] = "Please pass a name!!"
         return func.HttpResponse(
-             "Please pass a name on the query string or in the request body",
+             json.dumps(ret),
              status_code=400
         )
