@@ -1,41 +1,23 @@
 import os
 import json
-from datetime import datetime
 import logging
-import pandas as pd
 import azure.functions as func
 from azure.cosmosdb.table.tableservice import TableService
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ManagedIdentityCredential
 from azure.identity import ClientSecretCredential
 
-
-def get_data_from_table_storage_table(table_service, table_name):
-    """ Retrieve data from Table Storage """
-    SOURCE_TABLE = table_name
-    for record in table_service.query_entities(
-        SOURCE_TABLE
-    ):
-        yield record
-        
-def get_dataframe_from_table_storage_table(table_service, table_name):
-    """ Create a dataframe from table storage data """
-    return pd.DataFrame(get_data_from_table_storage_table(table_service, table_name))
-
-
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Starting getMaxFromTable')
+    logging.info('Python HTTP trigger function processed a request.')
     KeyVault_DNS = os.environ["KeyVault_DNS"]
     SecretName = os.environ["SecretName"]
 
-    if(req.method == 'POST'):
-        name= req.headers.get('name')
-        col = req.headers.get('column')
-    else:
-        name = req.params.get('name')
-        name = req.params.get('column')
-
-    if name:
+    
+    table_name= req.headers.get('name')
+    
+    value = req.form.to_dict()
+    
+    if table_name:
         try: # Try with managed identity, otherwise to with Service Principal
             creds = ManagedIdentityCredential()
             client = SecretClient(vault_url=KeyVault_DNS, credential=creds)
@@ -49,17 +31,26 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         table_service = TableService(connection_string=retrieved_secret.value)
 
-        df = get_dataframe_from_table_storage_table(table_service, name)
-        maximo = df[col].max()
-        dateMax = datetime.fromtimestamp(maximo.timestamp())
-        dateRet = dateMax
-
-        ret = dict()
-        ret['max'] = dateRet.strftime("%Y%m%d %H:%M:%S")
+        if table_service.exists(table_name):
+            if 'PartitionKey' not in value.keys(): #This is mandatory
+                value['PartitionKey'] = 'reference'
+            
+            if 'RowKey' not in value.keys(): #This is mandatory too
+                value['RowKey'] = '001'
+            try:
+                table_service.update_entity(table_name=table_name, entity=value)
+            except:
+                table_service.insert_entity(table_name=table_name, entity=value)
+        else:
+            return func.HttpResponse(
+             "Please create the table!!",
+             status_code=400
+        )
         return func.HttpResponse(
-             json.dumps(ret),
+             "Success",
              status_code=200
         )
+
     else:
         return func.HttpResponse(
              "Please pass a name on the query string or in the request body",
