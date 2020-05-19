@@ -12,7 +12,7 @@ Deletes everything from a table, similar to truncate but you also lose columns (
 
 ```json
 {
-    "name": "[existing table in lake]",
+    "name": "[existing table in lake]"
 }
 ```
 

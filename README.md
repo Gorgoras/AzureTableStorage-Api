@@ -10,3 +10,6 @@ Just a wrapper for common operations that are not easy to get with standard quer
 * [cleanTableStorage](documentation/cleanTableStorage.md) :
 	*	`POST /api/cleanTableStorage/` 
 	*	`GET /api/cleanTableStorage/` 
+
+* [insertRow](documentation/insertRow.md) :
+	*	`POST /api/insertRow/` 
