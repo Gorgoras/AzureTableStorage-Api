@@ -6,23 +6,23 @@ from azure.cosmosdb.table.tableservice import TableService
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ManagedIdentityCredential
 import azure.functions as func
+import sys
 
+#These are necessary to import from a parent folder because of venv
+root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root_folder)
+from utilities.login import getConnectionString
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    KeyVault_DNS = os.environ["KeyVault_DNS"]
-    SecretName = os.environ["SecretName"]
+    name= req.headers.get('name')
 
-    if(req.method == 'POST'):
-        name= req.headers.get('name')
-    else:
+    if not name: #If name wasnt added as header, search for it in the parameters
         name = req.params.get('name')
 
     if name:
-        creds = ManagedIdentityCredential()
-        client = SecretClient(vault_url=KeyVault_DNS, credential=creds)
-        retrieved_secret = client.get_secret(SecretName)
+        retrieved_secret = getConnectionString()
 
         table_service = TableService(connection_string=retrieved_secret.value)
         

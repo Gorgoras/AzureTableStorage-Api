@@ -8,7 +8,12 @@ from azure.cosmosdb.table.tableservice import TableService
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ManagedIdentityCredential
 from azure.identity import ClientSecretCredential
+import sys
 
+#These are necessary to import from a parent folder because of venv
+root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root_folder)
+from utilities.login import getConnectionString
 
 def get_data_from_table_storage_table(table_service, table_name):
     """ Retrieve data from Table Storage """
@@ -25,37 +30,28 @@ def get_dataframe_from_table_storage_table(table_service, table_name):
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Starting getMaxFromTable')
-    KeyVault_DNS = os.environ["KeyVault_DNS"]
-    SecretName = os.environ["SecretName"]
 
-    if(req.method == 'POST'):
-        name= req.headers.get('name')
-        col = req.headers.get('column')
-    else:
-        name = req.params.get('name')
-        name = req.params.get('column')
-
+    
+    name= req.headers.get('name')
+    col = req.headers.get('column')
+    if not name:  #If name wasnt added as header, search for it in the parameters
+        name= req.params.get('name')
+        col = req.params.get('column')
+    
     if name:
-        try: # Try with managed identity, otherwise to with Service Principal
-            creds = ManagedIdentityCredential()
-            client = SecretClient(vault_url=KeyVault_DNS, credential=creds)
-            retrieved_secret = client.get_secret(SecretName)
-        except:
-            creds = ClientSecretCredential( client_id=os.environ["SP_ID"],
-                                            client_secret=os.environ["SP_SECRET"],
-                                            tenant_id=os.environ["TENANT_ID"])
-            client = SecretClient(vault_url=KeyVault_DNS, credential=creds)
-            retrieved_secret = client.get_secret(SecretName)
+        retrieved_secret = getConnectionString()
 
         table_service = TableService(connection_string=retrieved_secret.value)
 
         df = get_dataframe_from_table_storage_table(table_service, name)
         maximo = df[col].max()
-        dateMax = datetime.fromtimestamp(maximo.timestamp())
-        dateRet = dateMax
-
         ret = dict()
-        ret['max'] = dateRet.strftime("%Y%m%d %H:%M:%S")
+        try:
+            dateMax = datetime.fromtimestamp(maximo.timestamp())
+            dateRet = dateMax            
+            ret['max'] = dateRet.strftime("%Y%m%d %H:%M:%S")
+        except:
+            ret['max'] = maximo
         return func.HttpResponse(
              json.dumps(ret),
              status_code=200
