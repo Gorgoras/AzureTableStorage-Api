@@ -29,11 +29,13 @@ def get_dataframe_from_table_storage_table(table_service, table_name):
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Starting getMaxFromTable')
+    logging.info('Starting getAggFromTable')
 
     
     name= req.headers.get('name')
     col = req.headers.get('column')
+    agg = req.headers.get('aggregation')
+
     if not name:  #If name wasnt added as header, search for it in the parameters
         name= req.params.get('name')
         col = req.params.get('column')
@@ -44,14 +46,21 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         table_service = TableService(connection_string=retrieved_secret.value)
 
         df = get_dataframe_from_table_storage_table(table_service, name)
-        maximo = df[col].max()
+
+        if agg == 'max' or agg=='maximum':
+            ret_val = df[col].max()
+        if agg == 'min' or agg=='minimum':
+            ret_val = df[col].min()
+        if agg == 'avg' or agg=='mean':
+            ret_val = df[col].mean()
+
         ret = dict()
         try:
-            dateMax = datetime.fromtimestamp(maximo.timestamp())
+            dateMax = datetime.fromtimestamp(ret_val.timestamp())
             dateRet = dateMax            
-            ret['max'] = dateRet.strftime("%Y%m%d %H:%M:%S")
+            ret['result'] = dateRet.strftime("%Y%m%d %H:%M:%S")
         except:
-            ret['max'] = maximo
+            ret['result'] = ret_val
         return func.HttpResponse(
              json.dumps(ret),
              status_code=200

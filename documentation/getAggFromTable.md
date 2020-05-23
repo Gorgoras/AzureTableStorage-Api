@@ -1,8 +1,10 @@
-# getMaxFromTable
+# getAggFromTable
 
-Used to get the max of a column from a table.
+Used to get the aggregation of a column from a table. 
 
-**URL** : `/api/getMaxFromTable/`
+Accepted aggregations are: max, min and average.
+
+**URL** : `/api/getAggFromTable/`
 
 **Method** : `POST` or `GET`
 
@@ -13,7 +15,10 @@ Used to get the max of a column from a table.
 ```json
 {
     "name": "[existing table in lake]",
-    "column": "[existing column in table]"
+    "column": "[existing column in table]",
+    "aggregation": "max" or "maximum"
+                   "min" or "minimum"
+                   "avg" or "mean"
 }
 ```
 
@@ -22,7 +27,8 @@ Used to get the max of a column from a table.
 ```json
 {
     "name": "testAzureTableStorage",
-    "column": "RowKey"
+    "column": "RowKey",
+    "aggregation": "max"
 }
 ```
 
