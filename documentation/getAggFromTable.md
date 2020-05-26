@@ -40,6 +40,6 @@ Accepted aggregations are: max, min and average.
 
 ```json
 {
-    "max": "93144b288eb1fdccbe46d6fc0f241a51766ecd3d"
+    "result": "93144b288eb1fdccbe46d6fc0f241a51766ecd3d"
 }
 ```

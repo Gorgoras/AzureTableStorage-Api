@@ -28,3 +28,7 @@ Also, remember to authorize the Service Principal or the Managed Identity to the
 
 * [insertRow](documentation/insertRow.md) :
 	*	`POST /api/insertRow/` 
+
+* [deleteRows](documentation/deleteRows.md) :
+	*	`POST /api/deleteRows/` 
+	*	`GET /api/deleteRows/` 

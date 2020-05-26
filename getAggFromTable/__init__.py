@@ -5,28 +5,13 @@ import logging
 import pandas as pd
 import azure.functions as func
 from azure.cosmosdb.table.tableservice import TableService
-from azure.keyvault.secrets import SecretClient
-from azure.identity import ManagedIdentityCredential
-from azure.identity import ClientSecretCredential
 import sys
 
 #These are necessary to import from a parent folder because of venv
 root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(root_folder)
 from utilities.login import getConnectionString
-
-def get_data_from_table_storage_table(table_service, table_name):
-    """ Retrieve data from Table Storage """
-    SOURCE_TABLE = table_name
-    for record in table_service.query_entities(
-        SOURCE_TABLE
-    ):
-        yield record
-        
-def get_dataframe_from_table_storage_table(table_service, table_name):
-    """ Create a dataframe from table storage data """
-    return pd.DataFrame(get_data_from_table_storage_table(table_service, table_name))
-
+from utilities.pandasDataframe import get_dataframe_from_table_storage_table
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Starting getAggFromTable')

@@ -54,6 +54,6 @@ All the columns with its values.
 
 ```json
 {
-    "resultado": "Success"
+    "result": "Success"
 }
 ```

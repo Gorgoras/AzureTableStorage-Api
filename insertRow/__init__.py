@@ -3,9 +3,6 @@ import json
 import logging
 import azure.functions as func
 from azure.cosmosdb.table.tableservice import TableService
-from azure.keyvault.secrets import SecretClient
-from azure.identity import ManagedIdentityCredential
-from azure.identity import ClientSecretCredential
 import sys
 
 #These are necessary to import from a parent folder because of venv
