@@ -12,7 +12,7 @@ from utilities.login import getConnectionString
 from utilities.pandasDataframe import get_dataframe_from_table_storage_table
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+    logging.info('Starting delete rows.')
 
     table_name = req.headers.get('name')
     column = req.headers.get('column')

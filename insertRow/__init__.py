@@ -11,7 +11,7 @@ sys.path.append(root_folder)
 from utilities.login import getConnectionString
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+    logging.info('Starting insert row.')
 
     table_name= req.headers.get('name')
     if not table_name:  #If name wasnt added as header, search for it in the parameters
