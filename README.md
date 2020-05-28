@@ -26,9 +26,13 @@ Also, remember to authorize the Service Principal or the Managed Identity to the
 	*	`POST /api/cleanTableStorage/` 
 	*	`GET /api/cleanTableStorage/` 
 
+* [bulkInsert](documentation/bulkInsert.md) :
+	*	`POST /api/bulkInsert/` 
+
 * [insertRow](documentation/insertRow.md) :
 	*	`POST /api/insertRow/` 
 
 * [deleteRows](documentation/deleteRows.md) :
 	*	`POST /api/deleteRows/` 
 	*	`GET /api/deleteRows/` 
+
