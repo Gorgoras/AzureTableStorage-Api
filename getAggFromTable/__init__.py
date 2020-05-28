@@ -14,7 +14,7 @@ from utilities.login import getConnectionString
 from utilities.pandasDataframe import get_dataframe_from_table_storage_table
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Starting getAggFromTable')
+    logging.info('Starting getAggFromTable.')
 
     
     name= req.headers.get('name')
