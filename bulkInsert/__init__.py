@@ -24,17 +24,19 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         table_service = TableService(connection_string=retrieved_secret.value)
         batch = TableBatch()
-        for i in range(0, len(values)):
-            batch.insert_entity(values[i])
+        for i in range(0, len(values['rows'])):
+            batch.insert_entity(values['rows'][i])
 
         table_service.commit_batch(table_name, batch)
 
+        ret['result'] = "Success"
         return func.HttpResponse(
             json.dumps(ret),
             status_code=200
         )
     else:
+        ret['result'] = 'Error'
         return func.HttpResponse(
-             "Please pass a table name!",
+             json.dumps(ret),
              status_code=400
         )

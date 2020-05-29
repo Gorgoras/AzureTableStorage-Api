@@ -20,12 +20,16 @@ Inserts more than 1 row into an existing table.
 
  * Body
 
-All the columns with its values.
+A list named rows, that contains every row in json format. 
+
+**IMPORTANT**: Every row must include "PartitionKey" and "RowKey" attributes.
 ```json
-{
+{"rows":[
+    {
     "PartitionKey": "[anything]", 
     "RowKey": "[anything]",
-    "Value1": "[anything]"
+    "Value1": "[anything]"},
+    ]
 }
 ```
 
@@ -33,17 +37,23 @@ All the columns with its values.
 * Header example
 ```json
 {
-    "name": "testAzureTableStorage"
+    "name": "testingTable"
 }
 ```
 
 * Body example
 ```json
-{
-    "PartitionKey": "Part1", 
-    "RowKey": "001",
-    "Value1": "myvalue"
+{"rows":[{
+        "PartitionKey": "tasksSeattle",
+        "RowKey":"100",
+        "Description":"Task-random"
+      },{
+        "PartitionKey": "tasksSeattle",
+        "RowKey":"101",
+        "Description": "Task-random2"}
+       ]
 }
+
 ```
 
 ## Success Response
