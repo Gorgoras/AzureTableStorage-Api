@@ -13,31 +13,22 @@ root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__
 sys.path.append(root_folder)
 from utilities.login import getConnectionString
 
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Starting clean table.')
+    logging.info('Starting create table.')
     ret = dict()
     name= req.headers.get('name')
 
     if not name: #If name wasnt added as header, search for it in the parameters
         name = req.params.get('name')
-
+    
     if name:
         retrieved_secret = getConnectionString()
 
         table_service = TableService(connection_string=retrieved_secret.value)
-        
-        table_service.delete_table(name)
-        time.sleep(1)
-        existe = False
-        while(not existe):
-            logging.info("Intentando crearla...")
-            time.sleep(5)
-            existe = table_service.create_table(name)
+        table_service.create_table(name)
 
-        logging.info("Done!!")
-
-        
-        ret['result'] = 'Done!'
+        ret['result'] = 'Success'
         return func.HttpResponse(
              json.dumps(ret),
              status_code=200

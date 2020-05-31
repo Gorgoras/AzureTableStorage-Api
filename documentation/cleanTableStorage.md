@@ -32,6 +32,6 @@ Deletes everything from a table, similar to truncate but you also lose columns (
 
 ```json
 {
-    "resultado": "Listo!"
+    "result": "Done!"
 }
 ```

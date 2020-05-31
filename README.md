@@ -18,6 +18,10 @@ To deploy and run this function to Azure, make sure to set those attributes at S
 Also, remember to authorize the Service Principal or the Managed Identity to the secrets at the Azure Key Vault.
 
 **Endpoints**
+* [createTable](documentation/createTable.md) :
+	*	`POST /api/createTable/` 
+	*	`GET /api/createTable/` 
+
 * [getAggFromTable](documentation/getAggFromTable.md) : 
 	* `POST /api/getAggFromTable/` 
 	* `GET /api/getAggFromTable/` 
