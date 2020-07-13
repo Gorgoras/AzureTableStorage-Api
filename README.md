@@ -1,6 +1,6 @@
 # AzureTableStorage-Api
 
-![CI](https://github.com/Gorgoras/AzureTableStorage-Api/workflows/CI/badge.svg)
+![CI to Azure Function](https://github.com/Gorgoras/AzureTableStorage-Api/workflows/CI%20to%20Azure%20Function/badge.svg)
 
 Azure functions wrapper for common table operations that are not easy to get with standard queries to Azure Table Storage.
 
