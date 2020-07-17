@@ -47,4 +47,4 @@ jobs:
       id: AzureFunctionAction
       with:
         # Name of the Azure Function App
-        app-name: loadFromTableUrl
+        app-name: connectToTables
