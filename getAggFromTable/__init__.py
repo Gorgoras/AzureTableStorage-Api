@@ -24,7 +24,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if not name:  #If name wasnt added as header, search for it in the parameters
         name= req.params.get('name')
         col = req.params.get('column')
-    
+        agg = req.params.get('aggregation')
     if name:
         retrieved_secret = getConnectionString()
 
