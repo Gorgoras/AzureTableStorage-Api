@@ -42,3 +42,7 @@ Also, remember to authorize the Service Principal or the Managed Identity to the
 	*	`POST /api/deleteRows/` 
 	*	`GET /api/deleteRows/` 
 
+
+* [sqlQuery](documentation/sqlQuery.md) : Experimental!
+	*	`POST /api/sqlQuery/` 
+	*   `GET /api/sqlQuery/` 

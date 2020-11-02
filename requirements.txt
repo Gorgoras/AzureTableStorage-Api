@@ -3,3 +3,4 @@ pandas
 azure-cosmosdb-table
 azure-keyvault-secrets
 azure-identity
+pandasql

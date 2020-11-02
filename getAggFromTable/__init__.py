@@ -29,7 +29,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         retrieved_secret = getConnectionString()
 
         table_service = TableService(connection_string=retrieved_secret.value)
-
+ 
         df = get_dataframe_from_table_storage_table(table_service, name)
 
         if agg == 'max' or agg=='maximum':
