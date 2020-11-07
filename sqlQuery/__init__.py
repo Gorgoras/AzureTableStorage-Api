@@ -1,10 +1,11 @@
 import os
 import logging
-import pandas as pd
 from pandasql import sqldf
 import azure.functions as func
 from azure.cosmosdb.table.tableservice import TableService
 import sys
+import pandas
+
 
 #These are necessary to import from a parent folder because of venv
 root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
