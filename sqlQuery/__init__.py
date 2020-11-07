@@ -15,16 +15,21 @@ from utilities.pandasDataframe import get_dataframe_from_table_storage_table
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Starting SqlQuery.')
 
+    
     name = req.headers.get('name')
     query = req.headers.get('query')
+    logging.info('Name: {}'.format(name))
+    logging.info('Query: {}'.format(query))
 
     if name:
         retrieved_secret = getConnectionString()
 
+        logging.info('Getting table from azure storage')
         table_service = TableService(connection_string=retrieved_secret.value)
- 
+
         df = get_dataframe_from_table_storage_table(table_service, name)
 
+        logging.info('Applying query')
         result = sqldf(query, locals())
 
         return func.HttpResponse(
