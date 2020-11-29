@@ -24,6 +24,10 @@ Also, remember to authorize the Service Principal or the Managed Identity to the
 	*	`POST /api/createTable/` 
 	*	`GET /api/createTable/` 
 
+* [deleteTable](documentation/deleteTable.md) :
+	*	`POST /api/deleteTable/` 
+	*	`GET /api/deleteTable/` 
+
 * [getAggFromTable](documentation/getAggFromTable.md) : 
 	* `POST /api/getAggFromTable/` 
 	* `GET /api/getAggFromTable/` 
