@@ -1,6 +1,6 @@
 # AzureTableStorage-Api
 
-IMPORTANT: Not actively maintained, for a more modern version of this, check my other repo: https://github.com/Gorgoras/AzureTableStorage-Api
+IMPORTANT: Not actively maintained, for a more modern version of this, check my other repo: https://github.com/Gorgoras/AzTableStorage-FastApi
 
 
 Azure functions wrapper for common table operations that are not easy to get with standard queries to Azure Table Storage.
